@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.DoctorPrescriptionDao">
+    <insert id="insert" parameterType="com.example.hospital.api.db.pojo.DoctorPrescriptionEntity">
+        UPSERT INTO HOSPITAL.DOCTOR_PRESCRIPTION(
+        "id", "uuid", "patient_card_id", "diagnosis", "sub_dept_id", "doctor_id", "registration_id", "rp"
+    )
+    VALUES (
+        NEXT VALUE FOR HOSPITAL.DOCTOR_PRESCRIPTION_SEQUENCE, #{uuid}, ${patientCardId}, #{diagnosis},
+        ${subDeptId}, ${doctorId}, ${registrationId}, #{rp}
+        )
+    </insert>
+
+
+</mapper>

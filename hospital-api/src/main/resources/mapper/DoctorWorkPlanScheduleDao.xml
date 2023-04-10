@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.DoctorWorkPlanScheduleDao">
+    <insert id="insert" parameterType="com.example.hospital.api.db.pojo.DoctorWorkPlanScheduleEntity">
+        UPSERT INTO HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE(
+        "id", "work_plan_id", "slot", "maximum", "num"
+    )
+    VALUES(
+        NEXT VALUE FOR HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE_SEQUENCE, ${workPlanId},
+        ${slot}, ${maximum}, 0
+        )
+    </insert>
+
+    <select id="searchNewSchedule" parameterType="int" resultType="HashMap">
+        SELECT s."id"                          AS "id",
+               s."slot"                        AS "slot",
+               s."maximum"                     AS "maximum",
+               s."num"                         AS "num",
+               TO_CHAR(p."date", 'yyyy-MM-dd') AS "date"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN p
+                 JOIN HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE s ON p."id" = s."work_plan_id"
+        WHERE s."work_plan_id" = ${workPlanId}
+    </select>
+
+    <select id="searchDeptSubSchedule" parameterType="Map" resultType="HashMap">
+        SELECT p."id"        AS "workPlanId",
+               d."id"        AS "doctorId",
+               d."name"      AS "doctorName",
+               s."slot"      AS "slot",
+               s."maximum"   AS "maximum"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN p
+                 JOIN HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE s ON s."work_plan_id" = p."id"
+                 JOIN HOSPITAL.DOCTOR d ON p."doctor_id" = d."id"
+        WHERE p."date" = TO_DATE('${date}')
+          AND p."dept_sub_id" = ${deptSubId}
+        ORDER BY d."id", s."slot"
+    </select>
+
+    <select id="searchByWorkPlanId" parameterType="int" resultType="HashMap">
+        SELECT p."doctor_id" AS "doctorId",
+               s."id" AS "scheduleId",
+               s."slot" AS "slot",
+               s."maximum" AS "maximum",
+               s."num" AS "num"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN p
+                 JOIN HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE s ON s."work_plan_id" = p."id"
+        WHERE p."id" = ${workPlanId}
+    </select>
+
+    <select id="searchSumNumByIds" resultType="long">
+        SELECT SUM("num")
+        FROM HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE
+        WHERE "id" IN
+        <foreach collection="list" open="(" item="one" separator="," close=")">
+            ${one}
+        </foreach>
+    </select>
+
+    <delete id="deleteByIds">
+        DELETE FROM HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE
+        WHERE "id" IN
+        <foreach collection="list" open="(" item="one" separator="," close=")">
+            ${one}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByWorkPlanId" parameterType="int">
+        DELETE FROM HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE
+        WHERE "work_plan_id" = ${workPlanId}
+    </delete>
+
+</mapper>

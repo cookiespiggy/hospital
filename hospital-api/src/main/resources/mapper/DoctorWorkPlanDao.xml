@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.DoctorWorkPlanDao">
+    <select id="searchWorkPlanInRange" parameterType="Map" resultType="HashMap">
+        SELECT md."name" AS "deptName",
+        ds."id"   AS "deptSubId",
+        ds."name" AS "deptSubName",
+        d."name"  AS "doctorName",
+        wp."id"   AS "workPlanId",
+        wp."date" AS "date"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN wp
+        JOIN HOSPITAL.DOCTOR d ON wp."doctor_id" = d."id"
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON ds."id" = wp."dept_sub_id"
+        JOIN HOSPITAL.MEDICAL_DEPT md ON ds."dept_id" = md."id"
+        WHERE wp."date" BETWEEN TO_DATE('${startDate}') AND TO_DATE('${endDate}')
+        <if test="deptId!=null">
+            AND ds."dept_id" = ${deptId}
+        </if>
+        <if test="doctorName!=null">
+            AND d."name" LIKE '%${doctorName}%'
+        </if>
+        ORDER BY ds."id",wp."date"
+    </select>
+
+    <select id="searchId" parameterType="Map" resultType="Integer">
+        SELECT "id"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN
+        WHERE "doctor_id" = ${doctorId}
+          AND "dept_sub_id" = ${deptSubId}
+          AND "date" = TO_DATE('${date}')
+            LIMIT 1 OFFSET 0
+    </select>
+
+    <insert id="insert" parameterType="com.example.hospital.api.db.pojo.DoctorWorkPlanEntity">
+        UPSERT INTO HOSPITAL.DOCTOR_WORK_PLAN(
+        "id", "doctor_id", "dept_sub_id", "date", "maximum", "num"
+    )
+    VALUES(
+        NEXT VALUE FOR HOSPITAL.DOCTOR_WORK_PLAN_SEQUENCE, ${doctorId}, ${deptSubId},
+        TO_DATE('${date}'), ${maximum}, 0
+        )
+    </insert>
+
+    <update id="updateMaximum" parameterType="Map">
+        UPSERT INTO HOSPITAL.DOCTOR_WORK_PLAN("id", "maximum")
+    VALUES(${workPlanId}, ${maximum})
+    </update>
+
+    <select id="searchNumById" parameterType="int" resultType="Integer">
+        SELECT "num"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN
+        WHERE "id" = ${id}
+    </select>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM HOSPITAL.DOCTOR_WORK_PLAN
+        WHERE "id" = ${id}
+    </delete>
+
+
+
+</mapper>

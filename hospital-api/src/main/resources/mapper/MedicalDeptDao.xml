@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.MedicalDeptDao">
+    <select id="searchAll" resultType="HashMap">
+        SELECT "id",
+               "name"
+        FROM HOSPITAL.MEDICAL_DEPT
+    </select>
+
+    <select id="searchDeptAndSub" resultType="HashMap">
+        SELECT d."id" AS "deptId",
+               d."name" AS "deptName",
+               ds."id" AS "subId",
+               ds."name" AS "subName"
+        FROM HOSPITAL.MEDICAL_DEPT d
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON ds."dept_id" = d."id"
+    </select>
+
+    <select id="searchByPage" parameterType="Map" resultType="HashMap">
+        SELECT d."id" AS "id",
+        d."name" AS "name",
+        d."outpatient" AS "outpatient",
+        d."recommended" AS "recommended",
+        t1."subs" AS "subs",
+        t2."doctors" AS "doctors",
+        d."description" AS "description"
+        FROM HOSPITAL.MEDICAL_DEPT d
+        JOIN (
+        SELECT md."id",
+        COUNT(ms."id") AS "subs"
+        FROM HOSPITAL.MEDICAL_DEPT md
+        LEFT JOIN HOSPITAL.MEDICAL_DEPT_SUB ms ON ms."dept_id" = md."id"
+        GROUP BY md."id"
+        ) t1 ON t1."id" = d."id"
+        JOIN (
+        SELECT md."id",
+        COUNT(d."id") AS "doctors"
+        FROM HOSPITAL.MEDICAL_DEPT md
+        LEFT JOIN HOSPITAL.MEDICAL_DEPT_SUB ms ON ms."dept_id" = md."id"
+        LEFT JOIN HOSPITAL.MEDICAL_DEPT_SUB_AND_DOCTOR sd ON sd."dept_sub_id" = ms."id"
+        LEFT JOIN HOSPITAL.DOCTOR d ON d."id" = sd."doctor_id" AND d."status" = 1
+        GROUP BY md."id"
+        ) t2 ON d."id" = t2."id"
+        WHERE 1 = 1
+        <if test="name!=null">
+            AND d."name" LIKE '%${name}%'
+        </if>
+        <if test="outpatient!=null">
+            AND d."outpatient" = ${outpatient}
+        </if>
+        <if test="recommended!=null">
+            AND d."recommended" = ${recommended}
+        </if>
+        LIMIT ${length} OFFSET ${start}
+    </select>
+
+    <select id="searchCount" parameterType="Map" resultType="long">
+        SELECT COUNT(*)
+        FROM HOSPITAL.MEDICAL_DEPT
+        WHERE 1 = 1
+        <if test="name!=null">
+            AND "name" LIKE '%${name}%'
+        </if>
+        <if test="outpatient!=null">
+            AND "outpatient" = ${outpatient}
+        </if>
+        <if test="recommended!=null">
+            AND "recommended" = ${recommended}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="com.example.hospital.api.db.pojo.MedicalDeptEntity">
+        UPSERT INTO HOSPITAL.MEDICAL_DEPT("id","name","outpatient","recommended","description")
+    VALUES(NEXT VALUE FOR HOSPITAL.MEDICAL_DEPT_SEQUENCE, #{name}, ${outpatient}, ${recommended}, #{description})
+    </insert>
+
+    <select id="searchById" parameterType="int" resultType="HashMap">
+        SELECT "name",
+               "outpatient",
+               "recommended",
+               "description"
+        FROM HOSPITAL.MEDICAL_DEPT
+        WHERE "id" = ${id}
+    </select>
+
+    <update id="update" parameterType="com.example.hospital.api.db.pojo.MedicalDeptEntity">
+        UPSERT INTO HOSPITAL.MEDICAL_DEPT("id","name","outpatient","recommended","description")
+    VALUES(${id}, #{name}, ${outpatient}, ${recommended}, #{description})
+    </update>
+
+    <select id="searchSubCount" resultType="long">
+        SELECT COUNT(*)
+        FROM HOSPITAL.MEDICAL_DEPT d
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB s ON s."dept_id" = d."id"
+        WHERE d."id" IN
+        <foreach collection="array" open="(" item="one" separator="," close=")">
+            ${one}
+        </foreach>
+    </select>
+
+    <delete id="deleteByIds">
+        DELETE FROM HOSPITAL.MEDICAL_DEPT
+        WHERE "id" IN
+        <foreach collection="array" open="(" item="one" separator="," close=")">
+            ${one}
+        </foreach>
+    </delete>
+</mapper>

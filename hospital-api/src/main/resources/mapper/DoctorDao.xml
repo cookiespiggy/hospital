@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.DoctorDao">
+    <select id="searchByPage" parameterType="Map" resultType="HashMap">
+        SELECT d."id" AS "id",
+        d."name" AS "name",
+        d."sex" AS "sex",
+        d."tel" AS "tel",
+        d."school" AS "school",
+        d."degree" AS "degree",
+        d."job" AS "job",
+        md."name" AS "deptName",
+        ds."name" AS "subName",
+        d."recommended" AS "recommended",
+        d."status" AS "status"
+        FROM HOSPITAL.DOCTOR d
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB_AND_DOCTOR sd ON sd."doctor_id" = d."id"
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON sd."dept_sub_id" = ds."id"
+        JOIN HOSPITAL.MEDICAL_DEPT md ON ds."dept_id" = md."id"
+        WHERE 1=1
+        <if test="name!=null">
+            AND d."name" LIKE '%${name}%'
+        </if>
+        <if test="deptId!=null">
+            AND md."id" = ${deptId}
+        </if>
+        <if test="degree!=null">
+            AND d."degree" = #{degree}
+        </if>
+        <if test="job!=null">
+            AND d."job" = #{job}
+        </if>
+        <if test="recommended!=null">
+            AND d."recommended" = ${recommended}
+        </if>
+        AND d."status" = ${status}
+        <if test="order!=null">
+            ORDER BY md."id" ${order}
+        </if>
+        LIMIT ${length} OFFSET #{start}
+    </select>
+
+    <select id="searchCount" parameterType="Map" resultType="long">
+        SELECT COUNT(*)
+        FROM HOSPITAL.DOCTOR d
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB_AND_DOCTOR sd ON sd."doctor_id" = d."id"
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON sd."dept_sub_id" = ds."id"
+        JOIN HOSPITAL.MEDICAL_DEPT md ON ds."dept_id" = md."id"
+        WHERE 1=1
+        <if test="name!=null">
+            AND d."name" LIKE '%${name}%'
+        </if>
+        <if test="deptId!=null">
+            AND md."id" = ${deptId}
+        </if>
+        <if test="degree!=null">
+            AND d."degree" = #{degree}
+        </if>
+        <if test="job!=null">
+            AND d."job" = #{job}
+        </if>
+        <if test="recommended!=null">
+            AND d."recommended" = ${recommended}
+        </if>
+        AND d."status" = ${status}
+    </select>
+
+    <select id="searchContent" parameterType="int" resultType="HashMap">
+        SELECT "photo",
+               "pid",
+               "birthday",
+               "uuid",
+               "hiredate",
+               "email",
+               "remark",
+               "tag",
+               "address",
+               "description"
+        FROM HOSPITAL.DOCTOR
+        WHERE "id" = ${id}
+    </select>
+
+    <update id="updatePhoto" parameterType="Map">
+        UPSERT INTO HOSPITAL.DOCTOR("id", "photo")
+    VALUES(${id}, #{photo})
+    </update>
+
+
+    <insert id="insert" parameterType="com.example.hospital.api.db.pojo.DoctorEntity">
+        UPSERT INTO HOSPITAL.DOCTOR(
+        "id", "name", "pid", "uuid", "sex", "birthday",
+        "school", "degree", "tel", "address", "email", "job", "remark",
+        "description", "hiredate", "tag","recommended","status", "create_time"
+    )
+    VALUES (
+        NEXT VALUE FOR HOSPITAL.DOCTOR_SEQUENCE, #{name}, #{pid}, #{uuid}, #{sex}, TO_DATE('${birthday}'),
+        #{school}, #{degree}, #{tel}, #{address}, #{email}, #{job}, #{remark},
+        #{description}, #{hiredate}, #{tag}, ${recommended}, ${status}, NOW()
+        )
+    </insert>
+
+    <select id="searchIdByUuid" parameterType="String" resultType="Integer">
+        SELECT "id"
+        FROM HOSPITAL.DOCTOR
+        WHERE "uuid" = #{uuid}
+    </select>
+    <select id="searchDeptAndSub" resultType="java.util.HashMap"></select>
+
+
+    <select id="searchById" parameterType="int" resultType="HashMap">
+        SELECT d."id" AS "id",
+               d."name" AS "name",
+               d."pid" AS "pid",
+               d."uuid" AS"uuid",
+               d."sex" AS "sex",
+               d."birthday" AS "birthday",
+               d."school" AS "school",
+               d."degree" AS "degree",
+               d."tel" AS "tel",
+               d."address" AS "address",
+               d."email" AS "email",
+               d."job" AS "job",
+               d."remark" AS "remark",
+               d."description" AS "description",
+               d."hiredate" AS "hiredate",
+               d."tag" AS "tag",
+               d."recommended" AS "recommended",
+               d."status" AS "status",
+               md."name" AS "deptName",
+               sd."dept_sub_id" AS "deptSubId"
+        FROM HOSPITAL.DOCTOR d
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB_AND_DOCTOR sd ON sd."doctor_id" = d."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB s ON sd."dept_sub_id" = s."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT md ON s."dept_id" = md."id"
+        WHERE d."id" = ${id}
+    </select>
+
+    <update id="update" parameterType="Map">
+        UPSERT INTO HOSPITAL.DOCTOR(
+        "id", "name", "pid", "sex", "birthday",
+        "school", "degree", "tel", "address", "email", "job", "remark",
+        "description", "hiredate", "tag","recommended","status"
+    )
+    VALUES (
+        ${id}, #{name}, #{pid}, #{sex}, TO_DATE('${birthday}'),
+        #{school}, #{degree}, #{tel}, #{address}, #{email}, #{job}, #{remark},
+        #{description}, #{hiredate}, #{tag}, ${recommended}, ${status}
+        )
+    </update>
+
+    <update id="deleteByIds">
+        UPSERT INTO HOSPITAL.DOCTOR("id", "status")
+        SELECT "id", 4
+        FROM HOSPITAL.DOCTOR
+        WHERE "id" IN
+        <foreach collection="array" open="(" item="one" separator="," close=")">
+            ${one}
+        </foreach>
+    </update>
+
+    <select id="searchByDeptSubId" parameterType="int" resultType="HashMap">
+        SELECT d."id" AS "id",
+               d."name" AS "name"
+        FROM HOSPITAL.DOCTOR d
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB_AND_DOCTOR sd ON sd."doctor_id" = d."id"
+        WHERE sd."dept_sub_id" = ${deptSubId}
+          AND d."status" = 1
+    </select>
+
+    <select id="searchDataForOnlineCache" parameterType="int" resultType="HashMap">
+        select d."id" AS "doctorId",
+               d."uuid" AS "uuid",
+               d."name" AS "name",
+               d."photo" AS "photo",
+               d."job" AS "job",
+               d."description" AS "description",
+               d."remark" AS "remark",
+               md."id" AS "deptId",
+               md."name" AS "deptName",
+               ds."id" AS "subId",
+               ds."name" AS "subName",
+               TO_CHAR(dp."price_2") AS "price"
+        FROM HOSPITAL.DOCTOR d
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB_AND_DOCTOR sd ON sd."doctor_id" = d."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON sd."dept_sub_id" = ds."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT md ON md."id" = ds."dept_id"
+                 JOIN HOSPITAL.DOCTOR_PRICE dp ON dp."doctor_id" = d."id"
+        WHERE d."id" = ${doctorId}
+    </select>
+
+</mapper>

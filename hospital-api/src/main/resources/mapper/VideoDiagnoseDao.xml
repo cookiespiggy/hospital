@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.VideoDiagnoseDao">
+    <!--根据挂号单ID，查询付款结果-->
+    <select id="searchPaymentStatus" parameterType="int" resultType="HashMap">
+        SELECT "doctor_id" AS "doctorId",
+               "payment_status" AS "paymentStatus"
+        FROM HOSPITAL.VIDEO_DIAGNOSE
+        WHERE "id" = ${id}
+    </select>
+
+    <!--关闭挂号单-->
+    <update id="closePayment" parameterType="Map">
+        UPSERT INTO HOSPITAL.VIDEO_DIAGNOSE("id", "payment_status")
+        SELECT "id", 3
+        FROM HOSPITAL.VIDEO_DIAGNOSE
+        WHERE "payment_status" = 1
+        <if test="id!=null">
+            AND "id" = ${id}
+        </if>
+        <if test="timer!=null">
+            AND (NOW()-"create_time") &gt;= 0.00695
+        </if>
+    </update>
+
+    <select id="searchVideoDiagnoseInfo" parameterType="int" resultType="HashMap">
+        SELECT vd."id"                                           AS "diagnoseId",
+               pc."name"                                         AS "name",
+               pc."tel"                                          AS "tel",
+               pu."photo"                                        AS "photo",
+               TO_CHAR(vd."expect_start", 'yyyy-MM-dd HH:mm:ss') AS "expectStart",
+               TO_CHAR(vd."expect_end", 'yyyy-MM-dd HH:mm:ss')   AS "expectEnd",
+               vd."status"                                       AS "status"
+        FROM HOSPITAL.VIDEO_DIAGNOSE vd
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD pc ON vd."patient_card_id" = pc."id"
+                 JOIN HOSPITAL.PATIENT_USER pu ON pc."user_id" = pu."id"
+        WHERE vd."id" = ${diagnoseId}
+    </select>
+
+
+
+    <update id="updateStatus" parameterType="HashMap">
+        UPSERT INTO  HOSPITAL.VIDEO_DIAGNOSE(
+        "id", "status"
+        <if test="realStart!=null">
+            ,"real_start"
+        </if>
+        <if test="realEnd!=null">
+            ,"real_end"
+        </if>
+        )
+        VALUES(
+        ${id}, ${status}
+        <if test="realStart!=null">
+            ,TO_DATE('${realStart}')
+        </if>
+        <if test="realEnd!=null">
+            ,TO_DATE('${realEnd}')
+        </if>
+        )
+    </update>
+
+    <update id="closeVideoDiagnose">
+        UPSERT INTO HOSPITAL.VIDEO_DIAGNOSE("id", "status")
+        SELECT "id", 3
+        FROM HOSPITAL.VIDEO_DIAGNOSE
+        WHERE "status" IN(1,2)
+          AND (NOW()-"expect_end") &gt;= 0.003472
+    </update>
+
+    <!--查询某位医生最近7天接单统计-->
+    <select id="searchStatisticsOfSevenDays" parameterType="int" resultType="HashMap">
+        SELECT TO_CHAR("create_time",'yyyy-MM-dd') AS "date",
+               COUNT(*) AS "count"
+        FROM HOSPITAL.VIDEO_DIAGNOSE
+        WHERE "doctor_id" = ${doctorId}
+        GROUP BY TO_CHAR("create_time",'yyyy-MM-dd')
+        ORDER BY TO_CHAR("create_time",'yyyy-MM-dd') DESC
+            LIMIT 7 OFFSET 0
+    </select>
+    <!--查询某位医生当年每月接单统计-->
+    <select id="searchStatisticsOfYear" parameterType="int" resultType="HashMap">
+        SELECT TO_CHAR("create_time",'yyyy-MM') AS "month",
+               COUNT(*) AS "count"
+        FROM HOSPITAL.VIDEO_DIAGNOSE
+        WHERE "doctor_id" = ${doctorId}
+          AND TO_CHAR(NOW(),'yyyy') = TO_CHAR("create_time",'yyyy')
+        GROUP BY TO_CHAR("create_time",'yyyy-MM')
+        ORDER BY TO_CHAR("create_time",'yyyy-MM')
+    </select>
+
+</mapper>

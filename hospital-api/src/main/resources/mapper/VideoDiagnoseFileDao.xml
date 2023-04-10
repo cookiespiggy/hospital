@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.VideoDiagnoseFileDao">
+    <select id="searchImageByVideoDiagnoseId" parameterType="int" resultType="String">
+        SELECT "path"
+        FROM HOSPITAL.VIDEO_DIAGNOSE_FILE
+        WHERE "video_diagnose_id" = ${videoDiagnoseId}
+        ORDER BY "id"
+    </select>
+
+
+</mapper>

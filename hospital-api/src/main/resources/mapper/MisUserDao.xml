@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.api.db.dao.MisUserDao">
+    <select id="searchUserPermissions" parameterType="int" resultType="String">
+        SELECT p."permission_code" AS "permission"
+        FROM HOSPITAL.MIS_USER u
+                 JOIN HOSPITAL.MIS_USER_ROLE ur ON u."id" = ur."user_id"
+                 JOIN HOSPITAL.MIS_ROLE_PERMISSION rp ON rp."role_id" = ur."role_id"
+                 JOIN HOSPITAL.MIS_PERMISSION p ON rp."permission_id" = p."id"
+        WHERE u."id" = ${userId}
+    </select>
+    <select id="login" parameterType="Map" resultType="Integer">
+        SELECT "id"
+        FROM HOSPITAL.MIS_USER
+        WHERE "username" = #{username}
+          AND "password" = #{password}
+    </select>
+
+    <select id="searchRefId" parameterType="int" resultType="HashMap">
+        SELECT "job",
+               "ref_id" AS "refId"
+        FROM HOSPITAL.MIS_USER
+        WHERE "id" = ${id}
+    </select>
+
+    <select id="searchUserId" parameterType="HashMap" resultType="Integer">
+        SELECT "id"
+        FROM HOSPITAL.MIS_USER
+        WHERE "ref_id" = ${refId}
+          AND "job" = #{job}
+    </select>
+</mapper>
