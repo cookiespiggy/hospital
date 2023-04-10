@@ -1,0 +1,159 @@
+@import url('../../style.less');
+page {
+	background-color: @bc-12;
+	font-family: @ff-1;
+	padding-bottom: 10rpx;
+}
+.top-container {
+	padding: 45rpx 40rpx 120rpx 40rpx;
+	background-color: @bgc-10;
+	display: flex;
+	.info {
+		flex-grow: 1;
+		margin-left: 25rpx;
+		.operate,
+		.username {
+			display: block;
+			font-size: 38rpx;
+			font-weight: bold;
+			color: #fff;
+			margin-bottom: 5rpx;
+		}
+		.remark,
+		.tel {
+			display: block;
+			font-size: 26rpx;
+			color: #fff;
+			letter-spacing: 1rpx;
+		}
+	}
+}
+.navigator-container {
+	background-color: #fff;
+	margin: -95rpx 35rpx 0rpx 35rpx;
+	padding: 30rpx 20rpx;
+	box-sizing: border-box;
+	border-radius: 15rpx;
+	.navigator-icon {
+		position: relative;
+		overflow: initial;
+		margin-top: 10rpx;
+		&::before {
+			display: block;
+			content: '';
+			width: 108rpx;
+			height: 108rpx;
+			background-color: @bc-13;
+			border-radius: 25rpx;
+			transform: rotate(10deg);
+			position: absolute;
+			top: -5rpx;
+			left: -5rpx;
+			z-index: 0;
+		}
+	}
+	.navigator-icon-base {
+		width: 100rpx;
+		height: 100rpx;
+		background-repeat: no-repeat;
+		border-radius: 25rpx;
+		margin-bottom: 15rpx;
+		position: relative;
+		z-index: 10;
+		background-color: @bgc-18;
+	}
+	.navigator-icon-1 {
+		.navigator-icon-base;
+		background-image: url('@{baseUrl}/page/mine/navigator-icon-1.png');
+		background-size: 80rpx 80rpx;
+		background-position: 12rpx 14rpx;
+	}
+	.navigator-icon-2 {
+		.navigator-icon-base;
+		background-image: url('@{baseUrl}/page/mine/navigator-icon-2.png');
+		background-size: 75rpx 75rpx;
+		background-position: 15rpx 15rpx;
+	}
+	.navigator-icon-3 {
+		.navigator-icon-base;
+		background-image: url('@{baseUrl}/page/mine/navigator-icon-3.png');
+		background-size: 72rpx 72rpx;
+		background-position: 15rpx 15rpx;
+	}
+	.navigator-icon-4 {
+		.navigator-icon-base;
+		background-image: url('@{baseUrl}/page/mine/navigator-icon-4.png');
+		background-size: 72rpx 72rpx;
+		background-position: 15rpx 15rpx;
+	}
+	.title {
+		font-size: 26rpx;
+		color: @fc-1;
+		margin-top: 5rpx;
+	}
+}
+.publicity-container {
+	display: flex;
+	background-color: #fff;
+	margin: 30rpx 35rpx 30rpx 35rpx;
+	padding: 30rpx 10rpx;
+	border-radius: 15rpx;
+	.banner {
+		width: 100%;
+		display: block;
+	}
+}
+.mine-container,
+.service-container,
+.settings-container {
+	background-color: #fff;
+	margin: 30rpx 35rpx 30rpx 35rpx;
+	padding: 30rpx 10rpx 15rpx 10rpx;
+	border-radius: 15rpx;
+	.title-row {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 30rpx;
+		padding: 0 30rpx;
+		.title {
+			color: @fc-1;
+			font-weight: bold;
+			font-size: 36rpx;
+			display: flex;
+		}
+	}
+	.content {
+		.navigator-icon {
+			width: 82rpx;
+			height: 82rpx;
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.title {
+			font-size: 26rpx;
+			color: @fc-1;
+			margin-top: 15rpx;
+			margin-bottom: 30rpx;
+			display: block;
+			text-align: center;
+		}
+	}
+	.banner {
+		width: 630rpx;
+		height: auto;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 30rpx;
+	}
+}
+.ad-container {
+	margin: 10rpx 35rpx 30rpx 35rpx;
+
+	.banner {
+		width: 100%;
+		display: block;
+		border-radius: 15rpx;
+	}
+}

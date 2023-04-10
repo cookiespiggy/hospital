@@ -1,0 +1,195 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index"
+		}, {
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/checkup/checkup",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/message_list/message_list",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/registration_list/registration_list",
+			"style": {
+				"navigationBarTitleText": "我的挂号预约",
+				"enablePullDownRefresh": false
+			}
+
+		}
+	],
+	"subPackages": [{
+			"root": "user",
+			"pages": [{
+				"path": "fill_user_info/fill_user_info",
+				"style": {
+					"navigationBarTitleText": "创建就医信息卡",
+					"enablePullDownRefresh": false,
+					"usingComponents": {
+						"ocr-navigator": "plugin://ocr-plugin/ocr-navigator"
+					}
+				}
+
+			}, {
+				"path": "face_camera/face_camera",
+				"style": {
+					"navigationBarTitleText": "录入面部信息",
+					"enablePullDownRefresh": false
+				}
+
+			}]
+		},
+		{
+			"root": "registration",
+			"pages": [{
+					"path": "notice/notice",
+					"style": {
+						"navigationBarTitleText": "就诊须知",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "medical_dept_list/medical_dept_list",
+					"style": {
+						"navigationBarTitleText": "科室列表",
+						"enablePullDownRefresh": false,
+						"disableScroll": true
+					}
+
+				}, {
+					"path": "dept_sub_plan/dept_sub_plan",
+					"style": {
+						"navigationBarTitleText": "在线挂号",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "doctor_schedule/doctor_schedule",
+					"style": {
+						"navigationBarTitleText": "医生出诊信息",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "registration_info/registration_info",
+					"style": {
+						"navigationBarTitleText": "挂号记录",
+						"enablePullDownRefresh": false
+					}
+
+				},
+				{
+					"path": "prescription/prescription",
+					"style": {
+						"navigationBarTitleText": "电子处方",
+						"enablePullDownRefresh": false,
+						"navigationBarBackgroundColor": "#4aaccf",
+						"navigationBarTextStyle": "white"
+					}
+				}
+			]
+		},
+		{
+			"root": "video_diagnose",
+			"pages": [{
+				"path": "doctor_list/doctor_list",
+				"style": {
+					"navigationBarTitleText": "在线医生",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "video_diagnose/video_diagnose",
+				"style": {
+					"navigationBarTitleText": "视频问诊",
+					"enablePullDownRefresh": false,
+					"usingComponents": {
+						"trtc-room": "/wxcomponents/trtc-room/trtc-room"
+					}
+				}
+			}, {
+				"path": "order_list/order_list",
+				"style": {
+					"navigationBarTitleText": "视频问诊订单列表",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "prepare_diagnose/prepare_diagnose",
+				"style": {
+					"navigationBarTitleText": "提交问诊资料",
+					"enablePullDownRefresh": false
+				}
+
+			}]
+		}
+	],
+	"tabBar": {
+		"color": "#444",
+		"selectedColor": "#1296db",
+		"list": [{
+				"text": "首页",
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tab_bar/icon-1.png",
+				"selectedIconPath": "static/tab_bar/icon-2.png"
+			},
+			{
+				"text": "我的挂号",
+				"pagePath": "pages/registration_list/registration_list",
+				"iconPath": "static/tab_bar/icon-3.png",
+				"selectedIconPath": "static/tab_bar/icon-4.png"
+			},
+			{
+				"text": "消息中心",
+				"pagePath": "pages/message_list/message_list",
+				"iconPath": "static/tab_bar/icon-5.png",
+				"selectedIconPath": "static/tab_bar/icon-6.png"
+			},
+			{
+				"text": "体检中心",
+				"pagePath": "pages/checkup/checkup",
+				"iconPath": "static/tab_bar/icon-7.png",
+				"selectedIconPath": "static/tab_bar/icon-8.png"
+			},
+			{
+				"text": "个人中心",
+				"pagePath": "pages/mine/mine",
+				"iconPath": "static/tab_bar/icon-9.png",
+				"selectedIconPath": "static/tab_bar/icon-10.png"
+			}
+		]
+	},
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "神州线上医院",
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#ffffff"
+	},
+	"uniIdRouter": {},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+
+}

@@ -1,0 +1,108 @@
+@import url('../../style.less');
+page {
+	background-color: @bc-12;
+	font-family: @ff-1;
+}
+.registration {
+	background-color: #fff;
+	padding: 35rpx 35rpx;
+	margin-left: 35rpx;
+	margin-right: 35rpx;
+	margin-top: 35rpx;
+	border-radius: 15rpx;
+	display: flex;
+	.calendar {
+		width: 110rpx;
+		.month {
+			background-color: @bgc-9;
+			color: #fff;
+			text-align: center;
+			font-size: 32rpx;
+			padding: 12rpx 0;
+			border-left: solid 5rpx @bc-18;
+			border-right: solid 5rpx @bc-18;
+			border-top-left-radius: 10rpx;
+			border-top-right-radius: 10rpx;
+			font-weight: bold;
+		}
+		.day {
+			background-color: #fff;
+			color: @fc-3;
+			text-align: center;
+			font-size: 32rpx;
+			padding: 8rpx 0;
+			border-left: solid 5rpx @bc-18;
+			border-right: solid 5rpx @bc-18;
+			border-top: none;
+			border-bottom: solid 5rpx @bc-18;
+			border-bottom-left-radius: 10rpx;
+			border-bottom-right-radius: 10rpx;
+			font-weight: bold;
+		}
+	}
+	.content {
+		flex-grow: 1;
+		margin-left: 25rpx;
+		position: relative;
+		.row {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 7rpx;
+			.deptSubName {
+				font-size: 30rpx;
+				color: @fc-1;
+			}
+			.more {
+				display: flex;
+				margin-top: 7rpx;
+				position: relative;
+				left: 10rpx;
+				text {
+					font-size: 28rpx;
+					color: @fc-3;
+					margin-right: 0px;
+					margin-top: -2rpx;
+				}
+			}
+			.address {
+				font-size: 28rpx;
+				color: @fc-3;
+			}
+			.datetime {
+				font-size: 28rpx;
+				color: @fc-3;
+			}
+		}
+		.paid {
+			position: absolute;
+			right: -10rpx;
+			bottom: 0rpx;
+			font-size: 28rpx;
+			color: @fc-6;
+			font-weight: bold;
+			// background-color: @bgc-7;
+			padding: 8rpx 15rpx;
+			border-radius: 10rpx;
+			display: flex;
+			text {
+				margin-left: 5rpx;
+			}
+		}
+		.unpaid {
+			position: absolute;
+			right: 0rpx;
+			bottom: 13rpx;
+			font-size: 28rpx;
+			color: @fc-6;
+			font-weight: bold;
+		}
+		.refund,.discarded{
+			position: absolute;
+			right: 0rpx;
+			bottom: 13rpx;
+			font-size: 28rpx;
+			color: @fc-3;
+			font-weight: bold;
+		}
+	}
+}

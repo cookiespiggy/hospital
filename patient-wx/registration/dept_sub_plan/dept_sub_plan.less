@@ -1,0 +1,128 @@
+@import url('../../style.less');
+page {
+	background-color: @bgc-12;
+	font-family: @ff-1;
+	padding-top: 15px;
+	padding-bottom: 0rpx;
+}
+
+.date-container {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 35rpx;
+	margin-bottom: 45rpx;
+	.item {
+		.day {
+			display: block;
+			font-size: 32rpx;
+			color: @fc-3;
+			text-align: center;
+			margin-bottom: 15rpx;
+		}
+		.selector {
+			padding: 10rpx 15rpx;
+			border-radius: 10rpx;
+			.date {
+				display: block;
+				font-size: 36rpx;
+				text-align: center;
+				color: @fc-1;
+			}
+			.status {
+				display: block;
+				font-size: 20rpx;
+				text-align: center;
+				color: @fc-21;
+			}
+			.gray{
+				color: @fc-11;
+			}
+		}
+		.active {
+			background-color: @bgc-7;
+			.date {
+				color: #fff;
+			}
+			.status {
+				color: #fff;
+			}
+		}
+	}
+}
+
+.doctor {
+	background-color: #fff;
+	margin: 0 35rpx 35rpx 35rpx;
+	border-radius: 15rpx;
+	box-sizing: border-box;
+	padding: 30rpx 35rpx;
+	display: flex;
+	.info {
+		width: 500rpx;
+		margin-left: 30rpx;
+		.row {
+			display: flex;
+			position: relative;
+			.name {
+				font-size: 32rpx;
+				font-weight: bold;
+				color: @fc-1;
+				margin-right: 5rpx;
+			}
+			.job {
+				font-size: 28rpx;
+				color: @fc-1;
+				margin-top: 6rpx;
+				display: block;
+			}
+			.btn {
+				margin: 0;
+				height: 40rpx;
+				font-size: 24rpx;
+				line-height: 40rpx;
+				background-color: @btnc-6;
+				color: #fff;
+				border-radius: 20rpx;
+				position: absolute;
+				right: 0rpx;
+				&::after {
+					border: none;
+				}
+				&:active {
+					background-color: @btnac-6;
+				}
+			}
+			.num {
+				display: block;
+				background-color: @bgc-7;
+				font-size: 26rpx;
+				color: #fff;
+				line-height: 1;
+				padding: 10rpx 20rpx;
+				border-radius: 10rpx;
+				margin-top: 10rpx;
+				margin-right: 25rpx;
+			}
+			.price {
+				display: block;
+				background-color: @bgc-15;
+				font-size: 26rpx;
+				color: #fff;
+				line-height: 1;
+				padding: 10rpx 20rpx 10rpx 15rpx;
+				border-radius: 10rpx;
+				margin-top: 10rpx;
+			}
+			.desc {
+				font-size: 26rpx;
+				color: @fc-3;
+				margin-top: 6px;
+				line-height: 1.6;
+			}
+
+			&:nth-of-type(2) {
+				justify-content: start;
+			}
+		}
+	}
+}

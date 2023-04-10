@@ -1,0 +1,157 @@
+@import url('../../style.less');
+page {
+	background-color: @bc-12;
+	font-family: @ff-1;
+	padding-bottom: 55rpx;
+}
+.top-container {
+	background-color: @bgc-10;
+	height: 400rpx;
+	padding-top: 60rpx;
+	box-sizing: border-box;
+	.step-container {
+		display: flex;
+		justify-content: space-between;
+		padding: 0rpx 50rpx;
+		.icon {
+			background-color: rgba(255, 255, 255, 0.85);
+			width: 100rpx;
+			height: 100rpx;
+			border-radius: 50rpx;
+			position: relative;
+			background-repeat: no-repeat;
+		}
+		.icon-1 {
+			.icon;
+			background-image: url('@{baseUrl}/page/user/fill_user_info/top-icon-1.png');
+			background-size: 60rpx;
+			background-position: 24rpx 20rpx;
+			background-repeat: no-repeat;
+		}
+		.icon-2 {
+			.icon;
+			background-image: url('@{baseUrl}/page/user/fill_user_info/top-icon-2.png');
+			background-size: 56rpx;
+			background-position: 26rpx 26rpx;
+			background-repeat: no-repeat;
+		}
+		.icon-3 {
+			.icon;
+			background-image: url('@{baseUrl}/page/user/fill_user_info/top-icon-3.png');
+			background-size: 62rpx;
+			background-position: 21rpx 21rpx;
+			background-repeat: no-repeat;
+		}
+		.desc {
+			display: block;
+			font-size: 24rpx;
+			color: #fff;
+			text-align: center;
+			width: 180rpx;
+			position: absolute;
+			left: -40rpx;
+			top: 120rpx;
+			// background-color: red;
+		}
+		.line {
+			flex-grow: 1;
+			height: 0;
+			border-top: 1px solid @bc-2;
+			margin-top: 50rpx;
+			margin-left: 30rpx;
+			margin-right: 30rpx;
+		}
+	}
+}
+.info-container {
+	margin: -150rpx 35rpx 0rpx 35rpx;
+	background-color: #fff;
+	border-radius: 15rpx;
+	padding: 30rpx 40rpx 50rpx 40rpx;
+	.title {
+		display: block;
+		color: @fc-1;
+		font-weight: bold;
+		font-size: 36rpx;
+		margin-bottom: 10rpx;
+	}
+	.desc {
+		display: block;
+		color: @fc-3;
+		font-size: 24rpx;
+		margin-bottom: 10rpx;
+	}
+	.operate {
+		margin-top: 50rpx;
+	}
+}
+.info-1-container {
+	.info-container;
+	.ocr {
+		width: 26px;
+		position: absolute;
+		right: 80rpx;
+		z-index: 999;
+		margin-top: -10rpx;
+	}
+}
+.info-2-container {
+	.info-container;
+	.label {
+		display: flex;
+		margin-top: 30rpx;
+		margin-bottom: 30rpx;
+		text {
+			color: #2074fd;
+			font-weight: bold;
+			font-size: 30rpx;
+			margin-left: 10rpx;
+		}
+	}
+	.illness-tabs {
+		display: flex;
+		flex-wrap: wrap;
+		.tab {
+			background-color: #fcf6e6;
+			color: #f1ba30;
+			padding: 15rpx 25rpx;
+			margin-right: 20rpx;
+			margin-bottom: 20rpx;
+			font-size: 26rpx;
+			border-radius: 10rpx;
+			min-width: 20px;
+			text-align: center;
+		}
+		.active {
+			background-color: #f1ba30;
+			color: #fff;
+		}
+	}
+	.insurance-tabs {
+		display: flex;
+		flex-wrap: wrap;
+		.tab {
+			background-color: #e2f8f0;
+			color: #28ca98;
+			padding: 15rpx 25rpx;
+			margin-right: 20rpx;
+			margin-bottom: 20rpx;
+			font-size: 26rpx;
+			border-radius: 10rpx;
+			min-width: 20px;
+			text-align: center;
+		}
+		.active {
+			background-color: #28ca98;
+			color: #fff;
+		}
+	}
+}
+.banner {
+	display: block;
+	margin-top: 40rpx;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius: 15rpx;
+	width: 680rpx;
+}

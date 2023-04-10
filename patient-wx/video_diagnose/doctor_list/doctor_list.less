@@ -1,0 +1,93 @@
+@import url('../../style.less');
+page {
+	font-family: @ff-1;
+	background-color: @bgc-1;
+}
+.header-container {
+	padding: 20rpx 40rpx;
+	display: flex;
+	justify-content: space-between;
+	background-color: #fff;
+	.dept_sub,
+	.job,
+	.filter {
+		display: flex;
+		text {
+			font-size: 28rpx;
+			margin-right: 10rpx;
+		}
+	}
+}
+.doctor-container {
+	padding: 35rpx;
+	.doctor {
+		margin-bottom: 30rpx;
+		background-color: #fff;
+		border-radius: 10rpx;
+		padding: 40rpx 30rpx;
+		display: flex;
+		justify-content: space-between;
+		// .photo{
+		// 	width: 80rpx;
+		// 	height: 80rpx;
+		// 	border-radius: 10rpx;
+		// }
+		.info {
+			width: 500rpx;
+			.row {
+				display: flex;
+				justify-content: space-between;
+				.name {
+					font-size: 32rpx;
+					font-weight: bold;
+					color: @fc-1;
+				}
+				.job {
+					font-size: 28rpx;
+					color: @fc-1;
+					margin-top: 4rpx;
+					display: block;
+					font-weight: bold;
+				}
+				.btn {
+					margin: 0;
+					height: 40rpx;
+					font-size: 24rpx;
+					line-height: 40rpx;
+					background-color: @btnc-6;
+					color: #fff;
+					border-radius: 20rpx;
+					&::after {
+						border: none;
+					}
+					&:active {
+						background-color: @btnac-6;
+					}
+				}
+				.remark {
+					font-size: 28rpx;
+					color: @fc-1;
+					margin-top: 5rpx;
+				}
+				.desc {
+					font-size: 26rpx;
+					color: @fc-3;
+					margin-top: 6px;
+					line-height: 1.6;
+				}
+				.price{
+					color: @fc-10;
+					font-size: 36rpx;
+					font-weight: bold;
+				}
+				.minute{
+					font-size: 28rpx;
+					color: @fc-3;
+				}
+				&:last-child{
+					margin-top: 20rpx;
+				}
+			}
+		}
+	}
+}

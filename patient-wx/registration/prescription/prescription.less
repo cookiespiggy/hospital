@@ -1,0 +1,101 @@
+@import url('../../style.less');
+page {
+	background-color: @bgc-26;
+	font-family: @ff-1;
+	padding: 0 0 100rpx 0;
+}
+.main {
+	background-color: #fff;
+	margin: 20rpx 40rpx 0 40rpx;
+	border-radius: 15rpx;
+	position: relative;
+	padding: 0 50rpx;
+	&::before {
+		content: '';
+		display: block;
+		width: 40rpx;
+		height: 40rpx;
+		border-radius: 20rpx;
+		background-color: @bgc-26;
+		position: absolute;
+		top: 300rpx;
+		left: -20rpx;
+	}
+	&::after {
+		content: '';
+		display: block;
+		width: 40rpx;
+		height: 40rpx;
+		border-radius: 20rpx;
+		background-color: @bgc-26;
+		position: absolute;
+		top: 300rpx;
+		right: -20rpx;
+	}
+}
+
+.hospital {
+	font-size: 36rpx;
+	// font-weight: bold;
+	color: @fc-1;
+	text-align: center;
+	padding: 40rpx 0 20rpx 0rpx;
+}
+.title {
+	font-size: 36rpx;
+	font-weight: bold;
+	color: @fc-1;
+	text-align: center;
+	padding: 0rpx 0 20rpx 0rpx;
+}
+
+.qrcode {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 30rpx;
+	width: 140px;
+	height: 140px;
+}
+
+.info-container{
+	.row{
+		display: flex;
+		justify-content: space-between;
+		border-bottom: 1px solid @bc-19;
+		text{
+			color: @fc-1;
+			font-weight: bold;
+			line-height: 3.0;
+		}
+	}
+}
+
+.rp-container{
+	padding: 50rpx 0;
+	.rp-title{
+		font-size: 50rpx;
+		font-weight: bold;
+		color: @fc-1;
+	}
+	.rp{
+		padding: 20rpx 0;
+		border-bottom: 1px dashed @bc-5;
+		.row{
+			display: flex;
+			justify-content: space-between;
+			line-height: 2.2;
+			.name{
+				color: @fc-1;
+				font-weight: bold;
+			}
+		}
+	}
+}
+.responsible-person{
+	padding-bottom: 40rpx;
+	.person{
+		color: @fc-1;
+		line-height: 2.5;
+		font-weight: bold;
+	}
+}

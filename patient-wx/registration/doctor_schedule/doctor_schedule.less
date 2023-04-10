@@ -1,0 +1,93 @@
+@import url('../../style.less');
+page {
+	background-color: @bgc-1;
+	font-family: @ff-1;
+	padding-top: 15px;
+	padding-bottom: 60rpx;
+}
+.doctor {
+	background-color: #fff;
+	margin: 0 35rpx 35rpx 35rpx;
+	border-radius: 15rpx;
+	box-sizing: border-box;
+	padding: 30rpx 35rpx;
+	display: flex;
+	.info {
+		width: 500rpx;
+		margin-left: 30rpx;
+		.row {
+			display: flex;
+			position: relative;
+			.name {
+				font-size: 32rpx;
+				font-weight: bold;
+				color: @fc-1;
+				margin-right: 5rpx;
+			}
+			.job {
+				font-size: 28rpx;
+				color: @fc-1;
+				margin-top: 6rpx;
+				display: block;
+			}
+			.remark {
+				font-size: 28rpx;
+				color: @fc-1;
+				margin-top: 5rpx;
+			}
+			.desc {
+				font-size: 26rpx;
+				color: @fc-3;
+				margin-top: 6px;
+				line-height: 1.6;
+			}
+
+			&:nth-of-type(2) {
+				justify-content: start;
+			}
+		}
+	}
+}
+
+.schedule-container {
+	background-color: #fff;
+	margin: 35rpx;
+	padding: 30rpx 35rpx 60rpx 35rpx;
+	border-radius: 15rpx;
+	.title {
+		font-size: 30rpx;
+		color: @fc-1;
+		font-weight: bold;
+		display: block;
+		margin-bottom: 15rpx;
+	}
+	.item {
+		line-height: 54rpx;
+		background-color: @bgc-19;
+		border-radius: 27rpx;
+		padding: 0 17px;
+		font-size: 26rpx;
+		margin: 15rpx 0;
+		color: @fc-8;
+	}
+	.active {
+		color: #fff;
+		background-color: @bgc-21;
+	}
+	.disable {
+		background-color: @bgc-20;
+		color: @fc-17;
+	}
+	.notice-list {
+		margin-top: 30rpx;
+		margin-bottom: 40rpx;
+		margin-left: 0;
+		padding-left: 40rpx;
+		.notice-item {
+			color: @fc-3;
+			font-size: 26rpx;
+			line-height: 1.7;
+			margin-bottom: 20rpx;
+		}
+	}
+}

@@ -1,0 +1,130 @@
+@import url('../../style.less');
+page {
+	background-color: @bc-12;
+	font-family: @ff-1;
+	padding-top: 45rpx;
+	padding-bottom: 70rpx;
+}
+.top-container {
+	background-color: #fff;
+	border-radius: 15rpx;
+	margin: 0 35rpx;
+	padding: 30rpx 35rpx;
+	.logo {
+		width: 180rpx;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.title {
+		display: block;
+		font-size: 34rpx;
+		text-align: center;
+		font-weight: bold;
+		color: @fc-1;
+	}
+	.qrcode-container {
+		text-align: center;
+		.qrcode {
+			width: 140px;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 60rpx;
+		}
+		text {
+			display: block;
+			font-style: 26rpx;
+			color: @fc-1;
+			margin-top: 20rpx;
+		}
+	}
+}
+.step-container {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 60rpx;
+	margin-bottom: 20rpx;
+	margin-left: 30rpx;
+	margin-right: 30rpx;
+	.step {
+		width: 100rpx;
+		text-align: center;
+		flex-grow: 0;
+		.icon {
+			width: 100rpx;
+			height: 100rpx;
+			border-radius: 50rpx;
+			background-color: #f0f0f0;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 10rpx;
+		}
+		.icon-1 {
+			.icon;
+			background-image: url('@{baseUrl}/page/registration/registration_info/icon-1.png');
+			background-size: 70rpx;
+			background-repeat: no-repeat;
+			background-position: 19rpx 14rpx;
+			
+		}
+		.icon-2 {
+			.icon;
+			background-image: url('@{baseUrl}/page/registration/registration_info/icon-2.png');
+			background-size: 70rpx;
+			background-repeat: no-repeat;
+			background-position: 18rpx 17rpx;
+		}
+		.icon-3 {
+			.icon;
+			background-image: url('@{baseUrl}/page/registration/registration_info/icon-3.png');
+			background-size: 70rpx;
+			background-repeat: no-repeat;
+			background-position: 18rpx 16rpx;
+		}
+		text{
+			display: block;
+			color: @fc-3;
+			font-size: 24rpx;
+		}
+	}
+	.line{
+		height: 0;
+		flex-grow: 1;
+		border-top: 1px solid @bc-2;
+		margin-left: 20rpx;
+		margin-right: 20rpx;
+		margin-top: 50rpx;
+	}
+}
+.registration-container{
+	background-color: #fff;
+	border-radius: 15rpx;
+	margin-top: 35rpx;
+	margin-left: 35rpx;
+	margin-right: 35rpx;
+	.title{
+		border-bottom: 1px solid @bc-2;
+		padding: 30rpx 0 20rpx 0;
+		display: flex;
+		margin-bottom: 10px;
+		&::before{
+			display: block;
+			content: "";
+			width: 12rpx;
+			height: 35rpx;
+			background-color: @bgc-10;
+			margin-right: 30rpx;
+			margin-top: 5rpx;
+		}
+		text{
+			font-size: 30rpx;
+			font-weight: bold;
+			color: @fc-1;
+			
+		}
+	}
+	.registration{
+		margin: 0 15rpx;
+		padding-bottom: 20rpx;
+	}
+}

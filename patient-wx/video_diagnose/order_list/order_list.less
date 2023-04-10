@@ -1,0 +1,130 @@
+@import url('../../style.less');
+page {
+	font-family: @ff-1;
+	background-color: @bgc-1;
+}
+.banner {
+	height: 260rpx;
+	background-color: @bgc-18;
+	overflow: hidden;
+	display: flex;
+	image {
+		flex-grow: 0;
+		width: 220rpx;
+		height: auto;
+		margin-top: 50rpx;
+		margin-left: 20rpx;
+		margin-right: 10rpx;
+	}
+	.row-1{
+		margin-top: 40rpx;
+		.title{
+			font-size: 56rpx;
+			color: #fff;
+			font-weight: bold;
+		}
+		.remark{
+			background-color: @bgc-24;
+			font-size: 22rpx;
+			color: @fc-2;
+			padding: 5rpx 20rpx;
+			border-radius: 20rpx;
+			margin-left: 15rpx;
+			vertical-align: 10rpx;
+		}
+	}
+	.row-2{
+		margin-top: 20rpx;
+		.btn{
+			color: #fff;
+			background-color: @bgc-16;
+			width: 200rpx;
+			padding: 10rpx 0;
+			text-align: center;
+			border-radius: 10rpx;
+		}
+	}
+	.row-3{
+		margin-top: 10px;
+		font-size: 24rpx;
+		color: #fff;
+	}
+}
+.order {
+	background-color: #fff;
+	margin-top: 25rpx;
+	padding: 35rpx 0;
+	.row {
+		display: flex;
+		justify-content: space-between;
+		&:nth-child(1) {
+			border-bottom: 1rpx solid @bc-4;
+			padding: 0 35rpx 20rpx 35rpx;
+		}
+		&:nth-child(2) {
+			padding: 20rpx 35rpx 0 35rpx;
+		}
+		&:nth-child(3) {
+			padding: 10rpx 35rpx 0 35rpx;
+		}
+		&:nth-child(4) {
+			padding: 10rpx 35rpx 0 35rpx;
+		}
+		.status {
+			color: @fc-3;
+			font-size: 24rpx;
+		}
+		.doctor-name {
+			font-size: 38rpx;
+			font-weight: bold;
+			color: @fc-2;
+		}
+		.job {
+			font-size: 24rpx;
+			color: @fc-2;
+		}
+		.sub-name {
+			font-size: 30rpx;
+			color: @fc-2;
+		}
+		.unit {
+			font-size: 22rpx;
+			font-weight: bold;
+			color: @fc-2;
+		}
+		.amount {
+			font-size: 42rpx;
+			font-weight: bold;
+			color: @fc-2;
+		}
+		.create-time {
+			margin-top: 10px;
+			margin-left: -3rpx;
+		}
+		.btn {
+			color: #fff;
+			width: 120rpx;
+			font-size: 28rpx;
+			margin: 0;
+			padding: 0 0;
+			line-height: 2;
+			text-align: center;
+			border-radius: 10rpx;
+		}
+		.green {
+			background-color: @btnc-7;
+			&:active {
+				background-color: @btnac-7;
+			}
+		}
+		.gray {
+			background-color: @btnc-8;
+		}
+		.orange {
+			background-color: @btnc-9;
+		}
+		.blue{
+			color: @fc-4;
+		}
+	}
+}
