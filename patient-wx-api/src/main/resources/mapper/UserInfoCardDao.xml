@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.UserInfoCardDao">
+    <select id="searchUserTel" parameterType="int" resultType="String">
+        SELECT "tel"
+        FROM HOSPITAL.PATIENT_USER_INFO_CARD
+        WHERE "user_id" = ${userId}
+            LIMIT 1
+    </select>
+
+    <insert id="insert" parameterType="com.example.hospital.patient.wx.api.db.pojo.UserInfoCardEntity">
+        UPSERT INTO HOSPITAL.PATIENT_USER_INFO_CARD(
+        "id",
+        "user_id", "uuid", "name", "sex", "pid",
+        "tel", "birthday", "medical_history", "insurance_type"
+    )
+    VALUES (
+        NEXT VALUE FOR HOSPITAL.PATIENT_USER_INFO_CARD_SEQUENCE,
+        ${userId}, #{uuid}, #{name}, #{sex}, #{pid},
+        #{tel}, #{birthday}, #{medicalHistory}, #{insuranceType}
+        )
+    </insert>
+
+    <select id="searchUserInfoCard" parameterType="int" resultType="HashMap">
+        SELECT "id", "uuid", "name", "sex", "pid", "tel", "birthday",
+               "medical_history" AS "medicalHistory",
+               "insurance_type"  AS "insuranceType"
+        FROM HOSPITAL.PATIENT_USER_INFO_CARD
+        WHERE "user_id" = ${userId}
+    </select>
+    <update id="update" parameterType="com.example.hospital.patient.wx.api.db.pojo.UserInfoCardEntity">
+        UPSERT INTO HOSPITAL.PATIENT_USER_INFO_CARD(
+        "id", "name", "sex", "pid",
+        "tel", "birthday", "medical_history", "insurance_type"
+    )
+    VALUES (
+        ${id}, #{name}, #{sex}, #{pid},
+        #{tel}, #{birthday}, #{medicalHistory}, #{insuranceType}
+        )
+    </update>
+
+    <select id="hasUserInfoCard" parameterType="int" resultType="Integer">
+        SELECT "id"
+        FROM HOSPITAL.PATIENT_USER_INFO_CARD
+        WHERE "user_id" = ${userId}
+            LIMIT 1
+    </select>
+
+    <select id="searchExistFaceModel" parameterType="int" resultType="Boolean">
+        SELECT "exist_face_model" AS "existFaceModel"
+        FROM HOSPITAL.PATIENT_USER_INFO_CARD
+        WHERE "user_id" = ${userId}
+            LIMIT 1
+    </select>
+
+    <update id="updateExistFaceModel" parameterType="Map">
+        UPSERT INTO HOSPITAL.PATIENT_USER_INFO_CARD(
+            "id","exist_face_model"
+        )
+        SELECT "id", ${existFaceModel} FROM HOSPITAL.PATIENT_USER_INFO_CARD
+        WHERE "user_id" = ${userId}
+    </update>
+
+    <select id="searchIdByUserId" parameterType="int" resultType="Integer">
+        SELECT "id" FROM HOSPITAL.PATIENT_USER_INFO_CARD
+        WHERE "user_id" = ${userId}
+    </select>
+
+
+</mapper>

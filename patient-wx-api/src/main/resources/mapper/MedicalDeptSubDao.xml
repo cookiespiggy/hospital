@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.MedicalDeptSubDao">
+    <select id="searchMedicalDeptSubList" parameterType="int" resultType="HashMap">
+        SELECT "id", "name"
+        FROM HOSPITAL.MEDICAL_DEPT_SUB
+        WHERE "dept_id" = ${deptId}
+    </select>
+
+</mapper>

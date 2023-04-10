@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.VideoDiagnoseFileDao">
+    <select id="searchImageByVideoDiagnoseId" parameterType="int" resultType="HashMap">
+        SELECT "filename",
+               "path"
+        FROM HOSPITAL.VIDEO_DIAGNOSE_FILE
+        WHERE "video_diagnose_id" = ${videoDiagnoseId}
+        ORDER BY "id" ASC
+    </select>
+
+    <insert id="insert" parameterType="com.example.hospital.patient.wx.api.db.pojo.VideoDiagnoseEntity">
+        UPSERT INTO HOSPITAL.VIDEO_DIAGNOSE_FILE(
+        "id", "video_diagnose_id", "filename", "path", "create_time"
+    )
+    VALUES (
+        NEXT VALUE FOR HOSPITAL.VIDEO_DIAGNOSE_FILE_SEQUENCE,
+        ${videoDiagnoseId}, #{filename}, #{path}, NOW()
+        )
+    </insert>
+
+    <select id="searchVideoDiagnoseImage" parameterType="int" resultType="String">
+        SELECT "filename"
+        FROM HOSPITAL.VIDEO_DIAGNOSE_FILE
+        WHERE "video_diagnose_id" = ${videoDiagnoseId}
+    </select>
+
+    <delete id="delete" parameterType="Map">
+        DELETE FROM HOSPITAL.VIDEO_DIAGNOSE_FILE
+        WHERE "video_diagnose_id" = ${videoDiagnoseId}
+        <if test="filename!=null">
+            AND "filename" = #{filename}
+        </if>
+    </delete>
+
+</mapper>

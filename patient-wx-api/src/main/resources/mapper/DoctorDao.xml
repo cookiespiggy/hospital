@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.DoctorDao">
+    <select id="searchDoctorInfoById" parameterType="int" resultType="HashMap">
+        SELECT d."name" AS "name",
+               d."photo" AS "photo",
+               d."job" AS "job",
+               d."remark" AS "remark",
+               d."description" AS "description",
+               TO_CHAR(p."price_1",'###.##') AS "price"
+        FROM HOSPITAL.DOCTOR d
+                 JOIN HOSPITAL.DOCTOR_PRICE p ON d."id"=p."doctor_id"
+        WHERE d."id" = #{id}
+    </select>
+
+
+</mapper>

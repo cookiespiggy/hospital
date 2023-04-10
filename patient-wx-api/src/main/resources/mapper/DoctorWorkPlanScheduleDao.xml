@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.DoctorWorkPlanScheduleDao">
+    <select id="searchDoctorWorkPlanSchedule" parameterType="Map" resultType="HashMap">
+        SELECT p."id"      AS "workPlanId",
+               s."id"      AS "scheduleId",
+               s."slot"    AS "slot",
+               s."maximum" AS "maximum",
+               s."num"     AS "num"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN p
+                 JOIN HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE s ON p."id" = s."work_plan_id"
+        WHERE p."date" = TO_DATE('${date}')
+          AND p."doctor_id" = ${doctorId}
+        ORDER BY s."id"
+    </select>
+
+    <update id="updateNumById" parameterType="Map">
+        UPSERT INTO HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE("id","num")
+        SELECT "id",
+               "num" + ${n} AS "num"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE
+        WHERE "id" = ${id}
+    </update>
+
+    <update id="releaseNumByOutTradeNo" parameterType="String">
+        UPSERT INTO HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE("id","num")
+        SELECT s."id", s."num" - 1 AS "num"
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+                 JOIN HOSPITAL.DOCTOR_WORK_PLAN_SCHEDULE s ON r."doctor_schedule_id" = s."id"
+        WHERE r."out_trade_no" = #{outTradeNo}
+    </update>
+
+</mapper>

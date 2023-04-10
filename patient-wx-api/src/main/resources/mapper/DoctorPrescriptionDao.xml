@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.DoctorPrescriptionDao">
+    <select id="searchPrescriptionByRegistrationId" parameterType="Map" resultType="HashMap">
+        SELECT dp."uuid" AS "uuid",
+        ds."name" AS "deptSub",
+        dp."diagnosis" AS "diagnosis",
+        dp."rp" AS "rp",
+        pc."name" AS "patientName",
+        pc."sex" AS "patientSex",
+        TO_CHAR(pc."birthday", 'yyyy-MM-dd') AS "patientBirthday",
+        d."name" AS "doctorName"
+        FROM HOSPITAL.DOCTOR_PRESCRIPTION dp
+        JOIN HOSPITAL.DOCTOR d ON d."id"=dp."doctor_id"
+        JOIN HOSPITAL.PATIENT_USER_INFO_CARD pc ON pc."id"=dp."patient_card_id"
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON ds."id"=dp."sub_dept_id"
+        JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON c."id"=dp."patient_card_id"
+        WHERE dp."registration_id" = ${registrationId}
+        <if test="userId!=null">
+            AND c."user_id" = ${userId}
+        </if>
+    </select>
+
+</mapper>

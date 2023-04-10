@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.VideoDiagnoseDao">
+    <!--保存挂号记录-->
+    <insert id="insert" parameterType="com.example.hospital.patient.wx.api.db.pojo.VideoDiagnoseEntity">
+        UPSERT INTO HOSPITAL.VIDEO_DIAGNOSE(
+        "id", "patient_card_id", "doctor_id", "out_trade_no", "amount",
+        "payment_status", "prepay_id", "transaction_id", "expect_start",
+        "expect_end", "real_start", "real_end", "status", "create_time"
+    )
+    VALUES(
+        NEXT VALUE FOR HOSPITAL.VIDEO_DIAGNOSE_SEQUENCE, ${patientCardId}, ${doctorId}, #{outTradeNo}, ${amount},
+        1, #{prepayId}, NULL, TO_DATE('${expectStart}'),
+        TO_DATE('${expectEnd}'), NULL, NULL, 1, NOW()
+        )
+    </insert>
+
+    <!--根据流水号查询主键值-->
+    <select id="searchByOutTradeNo" parameterType="String" resultType="HashMap">
+        SELECT "id",
+               "doctor_id" AS "doctorId"
+        FROM HOSPITAL.VIDEO_DIAGNOSE
+        WHERE "out_trade_no" = #{outTradeNo}
+    </select>
+
+
+    <update id="updatePayment" parameterType="Map">
+        UPSERT INTO HOSPITAL.VIDEO_DIAGNOSE("id","transaction_id","payment_status")
+        SELECT "id", #{transactionId}, ${paymentStatus}
+        FROM HOSPITAL.VIDEO_DIAGNOSE
+        WHERE "out_trade_no" = #{outTradeNo}
+    </update>
+
+    <select id="searchByPage" parameterType="Map" resultType="HashMap">
+        SELECT v."id"                                           AS "id",
+               v."out_trade_no"                                 AS "outTradeNo",
+               TO_CHAR(v."amount", '#00.00')                    AS "amount",
+               v."payment_status"                               AS "paymentStatus",
+               v."prepay_id"                                    AS "prepayId",
+               TO_CHAR(v."expect_start", 'yyyy-MM-dd HH:mm:ss') AS "expectStart",
+               TO_CHAR(v."expect_end", 'yyyy-MM-dd HH:mm:ss')   AS "expectEnd",
+               v."status"                                       AS "status",
+               d."id"                                           AS "doctorId",
+               d."name"                                         AS "doctorName",
+               d."job"                                          AS "job",
+               ds."name"                                        AS "subName",
+               TO_CHAR(v."create_time", 'yyyy-MM-dd HH:mm')     AS "createTime"
+        FROM HOSPITAL.VIDEO_DIAGNOSE v
+                 JOIN HOSPITAL.DOCTOR d ON v."doctor_id" = d."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB_AND_DOCTOR sd ON sd."doctor_id" = d."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON sd."dept_sub_id" = ds."id"
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON v."patient_card_id" = c."id"
+                 JOIN HOSPITAL.PATIENT_USER u ON c."user_id" = u."id"
+        WHERE u."id" = ${userId}
+        ORDER BY v."id" DESC
+            LIMIT ${length} OFFSET ${start}
+    </select>
+    <select id="searchCount" parameterType="Map" resultType="long">
+        SELECT COUNT(*)
+        FROM HOSPITAL.VIDEO_DIAGNOSE v
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON v."patient_card_id" = c."id"
+                 JOIN HOSPITAL.PATIENT_USER u ON c."user_id" = u."id"
+        WHERE u."id" = ${userId}
+    </select>
+
+
+
+
+</mapper>

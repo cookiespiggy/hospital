@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.MedicalDeptDao">
+    <select id="searchMedicalDeptList" parameterType="Map" resultType="HashMap">
+        SELECT "id", "name"
+        FROM HOSPITAL.MEDICAL_DEPT
+        WHERE 1 = 1
+        <if test="recommended!=null">
+            AND "recommended" = #{recommended}
+        </if>
+        <if test="outpatient!=null">
+            AND "outpatient" = #{outpatient}
+        </if>
+    </select>
+
+    <select id="searchDeptAndSub" resultType="HashMap">
+        SELECT d."id" AS "deptId",
+               d."name" AS "deptName",
+               ds."id" AS "subId",
+               ds."name" AS "subName"
+        FROM HOSPITAL.MEDICAL_DEPT d
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON ds."dept_id" = d."id"
+    </select>
+
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.UserDao">
+
+    <insert id="insert" parameterType="com.example.hospital.patient.wx.api.db.pojo.UserEntity">
+        UPSERT INTO HOSPITAL.PATIENT_USER(
+        "id", "open_id", "nickname", "photo", "sex", "status", "create_time"
+    )
+    VALUES(
+        NEXT VALUE FOR HOSPITAL.PATIENT_USER_SEQUENCE, #{openId}, #{nickname}, #{photo}, #{sex}, #{status}, NOW()
+        )
+    </insert>
+
+    <select id="searchAlreadyRegistered" parameterType="String" resultType="Integer">
+        SELECT "id"
+        FROM HOSPITAL.PATIENT_USER
+        WHERE "open_id" = #{openId}
+            LIMIT 1
+    </select>
+
+    <select id="searchUserInfo" parameterType="int" resultType="HashMap">
+        SELECT "nickname", "sex", "photo"
+        FROM HOSPITAL.PATIENT_USER
+        WHERE "id" = ${userId}
+    </select>
+
+    <select id="searchOpenId" parameterType="int" resultType="HashMap">
+        SELECT u."open_id" AS "openId",
+               c."id" AS "patientCardId"
+        FROM HOSPITAL.PATIENT_USER u
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON c."user_id"=u."id"
+        WHERE u."id" = #{userId}
+    </select>
+
+
+</mapper>

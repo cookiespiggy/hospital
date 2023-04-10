@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.MedicalRegistrationDao">
+    <!--检查当天用户是否已经挂号3次以上-->
+    <select id="searchRegistrationCountInToday" parameterType="Map" resultType="long">
+        SELECT COUNT(*)
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON r."patient_card_id" = c."id"
+        WHERE c."user_id" = ${userId}
+          AND TO_CHAR(r."create_time", 'yyyy-MM-dd') = #{today}
+    </select>
+    <!--检查当天是否已经挂过该门诊的号-->
+    <select id="hasRegisterRecordInDay" parameterType="Map" resultType="Integer">
+        SELECT r."id"
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON r."patient_card_id" = c."id"
+        WHERE c."user_id" = ${userId}
+          AND "date" = TO_DATE('${date}')
+          AND "dept_sub_id" = ${deptSubId}
+          AND "payment_status" != 3
+    LIMIT 1
+    </select>
+
+    <insert id="insert" parameterType="com.example.hospital.patient.wx.api.db.pojo.MedicalRegistrationEntity">
+        UPSERT INTO HOSPITAL.MEDICAL_REGISTRATION(
+        "id", "patient_card_id", "work_plan_id", "doctor_schedule_id",
+        "doctor_id", "dept_sub_id", "date", "slot", "amount",
+         "out_trade_no", "prepay_id", "payment_status", "create_time"
+    )
+    VALUES(
+        NEXT VALUE FOR HOSPITAL.MEDICAL_REGISTRATION_SEQUENCE, ${patientCardId}, ${workPlanId}, ${doctorScheduleId},
+        ${doctorId}, ${deptSubId}, TO_DATE('${date}'), ${slot}, ${amount},
+        #{outTradeNo}, #{prepayId}, 1, NOW()
+        )
+    </insert>
+
+    <update id="discardPayment" parameterType="String">
+        UPSERT INTO HOSPITAL.MEDICAL_REGISTRATION("id","payment_status")
+        SELECT "id", 4
+        FROM HOSPITAL.MEDICAL_REGISTRATION
+        WHERE "out_trade_no" = #{outTradeNo}
+          AND "payment_status" = 1
+    </update>
+
+    <select id="searchWorkPlanIdAndScheduleId" parameterType="String" resultType="HashMap">
+        SELECT "doctor_schedule_id" AS "doctorScheduleId",
+               "work_plan_id"       AS "workPlanId"
+        FROM HOSPITAL.MEDICAL_REGISTRATION
+        WHERE "out_trade_no" = #{outTradeNo}
+    </select>
+
+    <update id="updatePayment" parameterType="Map">
+        UPSERT INTO HOSPITAL.MEDICAL_REGISTRATION("id","transaction_id","payment_status")
+        SELECT "id", #{transactionId}, ${paymentStatus}
+        FROM HOSPITAL.MEDICAL_REGISTRATION
+        WHERE "out_trade_no" = #{outTradeNo}
+    </update>
+
+    <select id="searchRegistrationCount" parameterType="Map" resultType="long">
+        SELECT COUNT(*)
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+        JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON r."patient_card_id" = c."id"
+        WHERE c."user_id" = ${userId}
+    </select>
+    <select id="searchRegistrationByPage" parameterType="Map" resultType="HashMap">
+        SELECT r."id"             AS "id",
+               r."date"           AS "date",
+               r."slot"           AS "slot",
+               s."name"           AS "name",
+               s."location"       AS "location",
+               d."job"            AS "job",
+               r."out_trade_no"   AS "outTradeNo",
+               r."prepay_id"      AS "prepayId",
+               r."transaction_id" AS "transactionId",
+               r."payment_status" AS "paymentStatus"
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON r."patient_card_id" = c."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB s ON r."dept_sub_id" = s."id"
+                 JOIN HOSPITAL.DOCTOR d ON d."id" = r."doctor_id"
+        WHERE c."user_id" = ${userId}
+        ORDER BY r."date" DESC
+            LIMIT ${length} OFFSET ${start}
+    </select>
+
+    <!--查询挂号单金额和患者openId，用于创建支付单-->
+    <select id="searchRepayInfo" parameterType="Map" resultType="HashMap">
+        SELECT u."open_id"                   AS "openId",
+               TO_CHAR(r."amount", '###.##') AS "amount"
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON r."patient_card_id" = c."id"
+                 JOIN HOSPITAL.PATIENT_USER u ON u."id" = c."user_id"
+        WHERE r."id" = ${id}
+          AND c."user_id" = ${userId}
+    </select>
+
+    <!--更新挂号单的流水号和prepay_id-->
+    <update id="updateRepayInfo" parameterType="Map">
+        UPSERT INTO HOSPITAL.MEDICAL_REGISTRATION("id","out_trade_no","prepay_id")
+    VALUES(${id}, #{outTradeNo}, #{prepayId})
+    </update>
+
+    <select id="searchRegistrationInfo" parameterType="Map" resultType="HashMap">
+        SELECT r."id"                        AS "id",
+               r."date"                      AS "date",
+               r."slot"                      AS "slot",
+               c."name"                      AS "patientName",
+               s."name"                      AS "subDeptName",
+               d."name"                      AS "doctorName",
+               s."location"                  AS "location",
+               d."job"                       AS "job",
+               r."out_trade_no"              AS "outTradeNo",
+               TO_CHAR(r."amount", '###.00') AS "amount",
+               r."payment_status"            AS "paymentStatus",
+               dp."id"                       AS "prescriptionId"
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+                 JOIN HOSPITAL.PATIENT_USER_INFO_CARD c ON r."patient_card_id" = c."id"
+                 JOIN HOSPITAL.MEDICAL_DEPT_SUB s ON r."dept_sub_id" = s."id"
+                 JOIN HOSPITAL.DOCTOR d ON d."id" = r."doctor_id"
+                 JOIN HOSPITAL.DOCTOR_PRESCRIPTION dp ON dp."registration_id" = r."id"
+        WHERE r."id" = ${id}
+          AND c."user_id" = ${userId}
+    </select>
+
+
+
+
+</mapper>

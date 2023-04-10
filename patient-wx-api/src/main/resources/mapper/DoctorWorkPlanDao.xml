@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.hospital.patient.wx.api.db.dao.DoctorWorkPlanDao">
+    <select id="searchWorkPlanInRange" parameterType="Map" resultType="HashMap">
+        SELECT md."name" AS "deptName",
+        ds."id"   AS "deptSubId",
+        ds."name" AS "deptSubName",
+        d."name"  AS "doctorName",
+        wp."id"   AS "workPlanId",
+        wp."date" AS "date"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN wp
+        JOIN HOSPITAL.DOCTOR d ON wp."doctor_id" = d."id"
+        JOIN HOSPITAL.MEDICAL_DEPT_SUB ds ON ds."id" = wp."dept_sub_id"
+        JOIN HOSPITAL.MEDICAL_DEPT md ON ds."dept_id" = md."id"
+        WHERE wp."date" BETWEEN TO_DATE('${startDate}') AND TO_DATE('${endDate}')
+        <if test="deptId!=null">
+            AND ds."dept_id" = ${deptId}
+        </if>
+        <if test="doctorName!=null">
+            AND d."name" LIKE '%${doctorName}%'
+        </if>
+        ORDER BY ds."id",wp."date"
+    </select>
+
+    <select id="searchCanRegisterInDateRange" parameterType="Map" resultType="String">
+        SELECT DISTINCT "date"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN
+        WHERE "dept_sub_id" = ${deptSubId}
+          AND "date" BETWEEN TO_DATE('${startDate}') AND TO_DATE('${endDate}')
+    </select>
+
+    <select id="searchDeptSubDoctorPlanInDay" parameterType="Map" resultType="HashMap">
+        SELECT d."id"          AS "id",
+               d."name"        AS "name",
+               d."photo"       AS "photo",
+               d."job"         AS "job",
+               d."description" AS "description",
+               p."num"         AS "num",
+               p."maximum"     AS "maximum",
+               TO_CHAR(dp."price_1", '#00.00') AS "price"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN p
+                 JOIN HOSPITAL.DOCTOR d ON p."doctor_id" = d."id"
+                 JOIN HOSPITAL.DOCTOR_PRICE dp ON p."doctor_id" = dp."doctor_id"
+        WHERE p."dept_sub_id" = ${deptSubId}
+          AND p."date" = TO_DATE('${date}')
+    </select>
+
+    <update id="updateNumById" parameterType="Map">
+        UPSERT INTO HOSPITAL.DOCTOR_WORK_PLAN("id","num")
+        SELECT "id",
+               "num" + ${n} AS "num"
+        FROM HOSPITAL.DOCTOR_WORK_PLAN
+        WHERE "id" = ${id}
+    </update>
+
+    <update id="releaseNumByOutTradeNo" parameterType="String">
+        UPSERT INTO HOSPITAL.DOCTOR_WORK_PLAN("id","num")
+        SELECT p."id", p."num"-1 AS "num"
+        FROM HOSPITAL.MEDICAL_REGISTRATION r
+                 JOIN HOSPITAL.DOCTOR_WORK_PLAN p ON r."work_plan_id" = p."id"
+        WHERE r."out_trade_no" = #{outTradeNo}
+    </update>
+
+
+</mapper>
